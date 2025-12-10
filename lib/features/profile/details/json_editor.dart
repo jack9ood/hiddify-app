@@ -187,6 +187,12 @@ const Map<String, Map<String, dynamic>> protocolSchemaValues = {
     "host_key": [""],
     "client_version": "SSH-2.0-OpenSSH_7.4p1",
   },
+  "uap": {
+    "type": "uap",
+    "tag": "uap-out",
+    "server": "127.0.0.1",
+    "server_port": 1080,
+  },
 };
 const Map<String, Map<String, Map<String, dynamic>>> exampleSchemaValues = {
   "config.outbounds.transport": {
@@ -279,6 +285,7 @@ const Map<String, List<String>> possibleValues = {
     "tuic",
     "ssh",
     "shadowtls",
+    "uap",
     "custom",
     "direct",
     "block",
