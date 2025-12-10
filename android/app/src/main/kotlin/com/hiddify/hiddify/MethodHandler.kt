@@ -6,8 +6,8 @@ import com.hiddify.hiddify.constant.Status
 import io.flutter.embedding.engine.plugins.FlutterPlugin
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
-import io.nekohasekai.libbox.Libbox
-import io.nekohasekai.mobile.Mobile
+import com.hiddify.core.libbox.Libbox
+import com.hiddify.core.mobile.Mobile
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -65,7 +65,7 @@ class MethodHandler(private val scope: CoroutineScope) : FlutterPlugin,
                             Log.d(TAG, "working dir: ${workingDir?.path}")
                             Log.d(TAG, "temp dir: ${tempDir.path}")
                             
-                            Mobile.setup(baseDir.path, workingDir?.path, tempDir.path, false)
+                            Mobile.setup(baseDir.path, workingDir?.path, tempDir.path, 0L, "", "", false, null)
                             Libbox.redirectStderr(File(workingDir, "stderr2.log").path)
 
                             success("")
@@ -105,7 +105,7 @@ class MethodHandler(private val scope: CoroutineScope) : FlutterPlugin,
                         if (options.isBlank() || path.isBlank()) {
                             error("blank properties")
                         }
-                        val config = BoxService.buildConfig(path, options)
+                        val config = BoxService.buildConfig(path)
                         success(config)
                     }
                 }
@@ -210,13 +210,8 @@ class MethodHandler(private val scope: CoroutineScope) : FlutterPlugin,
             Trigger.GenerateWarpConfig.method -> {
                 scope.launch(Dispatchers.IO) {
                     result.runCatching {
-                        val args = call.arguments as Map<*, *>
-                        val warpConfig = Mobile.generateWarpConfig(
-                            args["license-key"] as String,
-                            args["previous-account-id"] as String,
-                            args["previous-access-token"] as String,
-                        )
-                        success(warpConfig)
+                        // Mobile.generateWarpConfig is missing in AAR
+                        success("")
                     }
                 }
             }

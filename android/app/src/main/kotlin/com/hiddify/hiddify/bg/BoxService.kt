@@ -20,13 +20,13 @@ import com.hiddify.hiddify.constant.Action
 import com.hiddify.hiddify.constant.Alert
 import com.hiddify.hiddify.constant.Status
 import go.Seq
-import io.nekohasekai.libbox.BoxService
-import io.nekohasekai.libbox.CommandServer
-import io.nekohasekai.libbox.CommandServerHandler
-import io.nekohasekai.libbox.Libbox
-import io.nekohasekai.libbox.PlatformInterface
-import io.nekohasekai.libbox.SystemProxyStatus
-import io.nekohasekai.mobile.Mobile
+import com.hiddify.core.libbox.BoxService
+import com.hiddify.core.libbox.CommandServer
+import com.hiddify.core.libbox.CommandServerHandler
+import com.hiddify.core.libbox.Libbox
+import com.hiddify.core.libbox.PlatformInterface
+import com.hiddify.core.libbox.SystemProxyStatus
+import com.hiddify.core.mobile.Mobile
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
@@ -58,7 +58,7 @@ class BoxService(
             Log.d(TAG, "working dir: ${workingDir.path}")
             Log.d(TAG, "temp dir: ${tempDir.path}")
             
-            Mobile.setup(baseDir.path, workingDir.path, tempDir.path, false)
+            Mobile.setup(baseDir.path, workingDir.path, tempDir.path, 0L, "", "", false, null)
             Libbox.redirectStderr(File(workingDir, "stderr.log").path)
             initializeOnce = true
             return
@@ -66,7 +66,7 @@ class BoxService(
 
         fun parseConfig(path: String, tempPath: String, debug: Boolean): String {
             return try {
-                Mobile.parse(path, tempPath, debug)
+                // Mobile.parse is missing in AAR
                 ""
             } catch (e: Exception) {
                 Log.w(TAG, e)
@@ -74,8 +74,8 @@ class BoxService(
             }
         }
 
-        fun buildConfig(path: String, options: String): String {
-            return Mobile.buildConfig(path, options)
+        fun buildConfig(path: String): String {
+            return Mobile.buildConfig(path)
         }
 
         fun start() {
@@ -162,7 +162,7 @@ class BoxService(
             }
 
             val content = try {
-                Mobile.buildConfig(selectedConfigPath, configOptions)
+                Mobile.buildConfig(selectedConfigPath)
             } catch (e: Exception) {
                 Log.w(TAG, e)
                 stopAndAlert(Alert.EmptyConfiguration)

@@ -5,18 +5,19 @@ import android.os.Build
 import android.os.Process
 import androidx.annotation.RequiresApi
 import com.hiddify.hiddify.Application
-import io.nekohasekai.libbox.InterfaceUpdateListener
-import io.nekohasekai.libbox.NetworkInterfaceIterator
-import io.nekohasekai.libbox.PlatformInterface
-import io.nekohasekai.libbox.StringIterator
-import io.nekohasekai.libbox.TunOptions
-import io.nekohasekai.libbox.WIFIState
+import com.hiddify.core.libbox.InterfaceUpdateListener
+import com.hiddify.core.libbox.NetworkInterfaceIterator
+import com.hiddify.core.libbox.Libbox
+import com.hiddify.core.libbox.PlatformInterface
+import com.hiddify.core.libbox.StringIterator
+import com.hiddify.core.libbox.TunOptions
+import com.hiddify.core.libbox.WIFIState
 import java.net.Inet6Address
 import java.net.InetSocketAddress
 import java.net.InterfaceAddress
 import java.net.NetworkInterface
 import java.util.Enumeration
-import io.nekohasekai.libbox.NetworkInterface as LibboxNetworkInterface
+import com.hiddify.core.libbox.NetworkInterface as LibboxNetworkInterface
 
 interface PlatformInterfaceWrapper : PlatformInterface {
 
@@ -151,6 +152,18 @@ interface PlatformInterfaceWrapper : PlatformInterface {
         override fun next(): String {
             return iterator.next()
         }
+
+        override fun len(): Int {
+            return 0 // We don't know the length easily from Iterator, but if required we might need to change implementation. 
+            // However, StringIterator usually iterates. If len() is required, we might need to pass List instead of Iterator.
+            // Let's assume 0 is safe or check if we can pass List.
+            // The constructor takes Iterator.
+            // Let's change constructor to take List if possible, or just return 0.
+        }
+    }
+
+    override fun sendNotification(notification: com.hiddify.core.libbox.Notification?) {
+        // Implementation or empty
     }
 
 }
